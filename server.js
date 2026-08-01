@@ -6,7 +6,7 @@ const db = require("./database");
 
 const app = express();
 
-const SECRET_KEY = "mysecretkey";
+const SECRET_KEY = process.env.SECRET_KEY;
 
 app.use(express.json());
 app.use(express.static("public"));
