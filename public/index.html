@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Authentication Demo</title>
+</head>
+
+<body>
+
+    <h1>Authentication Demo</h1>
+
+    <input
+        id="email"
+        type="email"
+        placeholder="Enter email">
+
+    <br><br>
+
+    <input
+        id="password"
+        type="password"
+        placeholder="Enter password">
+
+    <br><br>
+
+    <button onclick="signup()">
+        Sign Up
+    </button>
+
+    <button onclick="login()">
+        Login
+    </button>
+
+    <button onclick="getProfile()">
+        Profile
+    </button>
+
+    <script>
+
+        async function signup() {
+
+            const email =
+                document.getElementById("email").value;
+
+            const password =
+                document.getElementById("password").value;
+
+            const response = await fetch("/signup", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            const message = await response.text();
+
+            alert(message);
+        }
+
+        async function login() {
+
+            const email =
+                document.getElementById("email").value;
+
+            const password =
+                document.getElementById("password").value;
+
+            const response = await fetch("/login", {
+                method: "POST",
+
+                headers: {
+                    "Content-Type": "application/json"
+                },
+
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            const data = await response.json();
+
+            localStorage.setItem(
+                "token",
+                data.token
+            );
+
+            alert(data.message);
+        }
+
+        async function getProfile() {
+
+            const token =
+                localStorage.getItem("token");
+
+            const response = await fetch("/profile", {
+                headers: {
+                    authorization: token
+                }
+            });
+
+            const data = await response.json();
+
+            alert(
+                "Welcome " + data.email
+            );
+        }
+
+    </script>
+
+</body>
+
+</html>
